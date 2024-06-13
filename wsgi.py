@@ -6,8 +6,8 @@ from configparser import ConfigParser
 class WSGIgateway:
     """Application server for interacting with a web server by WSGI standard"""
 
-    def __init__(self, port: int, wsgi_app) -> None:
-        self.__host = socket.gethostbyname(socket.gethostname())
+    def __init__(self, host: str, port: int, wsgi_app) -> None:
+        self.__host = host
         self.__port = port
         self.__wsgi_app = wsgi_app
 
@@ -47,7 +47,7 @@ class WSGIgateway:
         # Call the WSGI application and send response body to the client
         response_body = self.__wsgi_app(environ, start_response)
         for data in response_body:
-            client_socket.sendall(data)
+            client_socket.sendall(data.encode())
 
         # Close connection after sending data
         client_socket.close()
@@ -60,6 +60,7 @@ def load_config(config_file: str) -> tuple[str, str, int]:
     config.read(config_file)
     module_path = config['WSGI']['ModulePath']
     application_name = config['WSGI']['ApplicationName']
+    sercer_host = config['SERVER']['Host']
     server_port = config['SERVER']['Port']
 
     return module_path, application_name, int(server_port)
