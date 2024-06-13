@@ -60,10 +60,10 @@ def load_config(config_file: str) -> tuple[str, str, int]:
     config.read(config_file)
     module_path = config['WSGI']['ModulePath']
     application_name = config['WSGI']['ApplicationName']
-    sercer_host = config['SERVER']['Host']
+    server_host = config['SERVER']['Host']
     server_port = config['SERVER']['Port']
 
-    return module_path, application_name, int(server_port)
+    return module_path, application_name, server_host, int(server_port)
 
 
 def load_application(module_path: str, application_name: str):
@@ -77,7 +77,7 @@ def load_application(module_path: str, application_name: str):
 
 
 if __name__ == '__main__':
-    module_path, application_name, server_port = load_config('config.ini')
+    module_path, application_name, server_host, server_port = load_config('config.ini')
     wsgi_application = load_application(module_path, application_name)
-    wsgi_gateway = WSGIgateway(server_port, wsgi_application)
+    wsgi_gateway = WSGIgateway(server_host, server_port, wsgi_application)
     wsgi_gateway.serve_forever()
