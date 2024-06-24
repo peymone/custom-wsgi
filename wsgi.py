@@ -1,5 +1,6 @@
 import socket  # just for understanding, use wsgiref instead
 import importlib.util
+from threading import Thread
 from configparser import ConfigParser
 
 
@@ -24,7 +25,8 @@ class WSGIgateway:
 
         while True:
             client_socket, client_address = self.__socket.accept()
-            self.handle_request(client_socket)
+            client_thread = Thread(target=self.handle_connection, args=(client_socket, ), daemon=True)
+            client_thread.start()
 
     def handle_connection(self, client_socket: socket.socket) -> None:
         request = client_socket.recv(1024).decode()
