@@ -17,16 +17,16 @@ class WSGIgateway:
         self.__socket.bind((self.__host, self.__port))
         self.__socket.listen()
 
-    def serve_forever(self) -> None:
-        """Accept connections and start request handling for clients"""
-
         print(f"WSGI Server started on {self.__host}:{self.__port}")
+
+    def accept_conenction(self) -> None:
+        """Accept connections and start request handling for clients"""
 
         while True:
             client_socket, client_address = self.__socket.accept()
             self.handle_request(client_socket)
 
-    def handle_request(self, client_socket: socket.socket) -> None:
+    def handle_connection(self, client_socket: socket.socket) -> None:
         request = client_socket.recv(1024).decode()
         request = request.split()
 
@@ -77,7 +77,10 @@ def load_application(module_path: str, application_name: str):
 
 
 if __name__ == '__main__':
+    # Configurate application server
     module_path, application_name, server_host, server_port = load_config('config.ini')
     wsgi_application = load_application(module_path, application_name)
     wsgi_gateway = WSGIgateway(server_host, server_port, wsgi_application)
-    wsgi_gateway.serve_forever()
+
+    # Start application server
+    wsgi_gateway.accept_conenction()
