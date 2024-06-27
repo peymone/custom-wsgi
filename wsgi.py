@@ -18,7 +18,7 @@ class WSGIgateway:
         self.__socket.bind((self.__host, self.__port))
         self.__socket.listen()
 
-        print(f"WSGI Server started on {self.__host}:{self.__port}")
+        print(f"WSGI Server started on http://{self.__host}:{self.__port}")
 
     def accept_conenction(self) -> None:
         """Accept connections and start request handling for clients"""
