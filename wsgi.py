@@ -8,6 +8,8 @@ class WSGIgateway:
     """Application server for interacting with a web server by WSGI standard"""
 
     def __init__(self, host: str, port: int, wsgi_app) -> None:
+        """""Set application server host and port, create socket"""
+
         self.__host = host
         self.__port = port
         self.__wsgi_app = wsgi_app
