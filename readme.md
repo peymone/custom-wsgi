@@ -10,23 +10,23 @@
 
 **_This application was created to demonstrate the interaction between a proxy server like nGinx, a WSGI gateway (an application server such as Gunicorn) and web frameworks such as Flask._**
 
-**_And also to consider something like this:_**
+_And also to consider something like this:_
 
-    * _load balancing on application servers_
-    * _data encryption using SSH_
+* _load balancing on application servers_
+* _data encryption using SSH_
 
-**_Plus you can see how async works using the select system call and generators (proxy.py)_**
+_Plus you can see how async works using the select system call and generators (proxy.py)_
 
 
 <h2>Program launch</h2>
 
 * _Configurate config.ini file:_
-
+  
     * _ModulePath - name of your wsgi application_
     * _ApplicationName - name of callable class instans in wsgi application_
     * _Host - server host_
     * _Port - server port_
-    
+
 * _Open terminal in progect directory_
 * _Launch application `python wsgi.py`_
 
