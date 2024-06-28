@@ -44,8 +44,6 @@ class Server:
 
         if request:
             wsgi_server = next(self.__balancer)
-            print(wsgi_server)
-
             wsgi_client.create_connection(wsgi_server)  # Create connection with application server
             wsgi_client.send(request)  # Redirect request to the WSGI (application) server
             headers, body = wsgi_client.recieve()  # Recieve data from application server
