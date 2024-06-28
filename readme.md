@@ -8,9 +8,13 @@
 
 <h2>About</h2>
 
-**_This application was created to demonstrate the interaction of the WSGI gateway (application server like gunicorn) and web frameworks such as Flask._**
+**_This application was created to demonstrate the interaction between a proxy server, a WSGI gateway (an application server such as Gunicorn) and web frameworks such as Flask._**
 
-**_Plus in select and generators branches you can see how async works at a low level_**
+**_And also to consider something like:_**
+**_* load balancing on application servers_**
+**_* data encryption using SSH_**
+
+**_Plus you can see how async works using the select system call and generators (proxy.py)_**
 
 
 <h2>Program launch</h2>
