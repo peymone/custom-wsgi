@@ -13,6 +13,7 @@ class Server:
 
         self.__host = host
         self.__port = port
+        self.__balancer = self.__balancer()  # Generator object for balancing
 
         # Create a server socket and enable listen mod
         self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -42,7 +43,10 @@ class Server:
         request = client_socket.recv(1024)  # Get data from client
 
         if request:
-            wsgi_client.create_connection()  # Create connection with application server
+            wsgi_server = next(self.__balancer)
+            print(wsgi_server)
+
+            wsgi_client.create_connection(wsgi_server)  # Create connection with application server
             wsgi_client.send(request)  # Redirect request to the WSGI (application) server
             headers, body = wsgi_client.recieve()  # Recieve data from application server
 
@@ -52,18 +56,33 @@ class Server:
             client_socket.sendall(headers)
             client_socket.sendall(body)
 
+    def __balancer(self):
+        """generator for balancing the load on application servers"""
 
-def load_config(config_file: str) -> tuple[str, int, str, int]:
+        while True:
+            for host, port in wsgi_servers.items():
+                yield host, port
+
+
+def load_config(config_file: str) -> tuple[str, int, dict]:
     """Load server settings from a config file"""
 
     config = ConfigParser()
     config.read(config_file)
     server_host = config['SERVER']['Host']
     server_port = config['SERVER']['Port']
-    wsgi_host = config['WSGI']['Host']
-    wsgi_port = config['WSGI']['Port']
+    wsgi_hosts = config['WSGI']['Host']
+    wsgi_ports = config['WSGI']['Port']
 
-    return server_host, int(server_port), wsgi_host, int(wsgi_port)
+    # Application server can be more than one - for balancing purpose
+    wsgi_hosts = wsgi_hosts.split()
+    wsgi_ports = [int(port) for port in wsgi_ports.split()]
+
+    wsgi_servers = dict()
+    for host, port in zip(wsgi_hosts, wsgi_ports):
+        wsgi_servers[host] = port
+
+    return server_host, int(server_port), wsgi_servers
 
 
 def event_loop():
@@ -95,9 +114,9 @@ def event_loop():
 
 
 if __name__ == '__main__':
-    host, port, wsgi_host, wsgi_port = load_config('config.ini')
+    host, port, wsgi_servers = load_config('config.ini')
     tasks = list()  # Generators for event loop
     proxy = Server(host, port)
-    wsgi_client = Client(wsgi_host, wsgi_port)
+    wsgi_client = Client()
 
     event_loop()
