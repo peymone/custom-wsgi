@@ -15,18 +15,25 @@ _And also to consider something like this:_
 * _load balancing on application servers (you can change number of application servers in config.ini)_
 * _asynchronous works using the select system call and generators (proxy.py)_
 
-<h2>Program launch</h2>
+<h2>DevOps via python installation</h2>
 
-* _Configurate config.ini file:_
+* Install python from [offisial site](https://www.python.org/downloads/)
   
-    * _ModulePath - name of your wsgi application_
-    * _ApplicationName - name of callable class instans in wsgi application_
-    * _Host - server host_
-    * _Port - server port_
+_<p>Proxy server</p>_
 
-* _Open terminal in progect directory_
-* _Launch application `python wsgi.py`_
+* Download latest proxy release from my GitHub
+* Configurate config.ini file
+    * Server - proxy server configuration (host and port)
+    * WSGI - application server configuration (host and port)
+* Open terminal in project directory and ebter the command: `python proxy.py`
 
-<br>
+> _you can list more than one WSGI servers_
 
-> _Explore this as you please_ 
+_<p>Application server</p>_
+
+* Download latest wsgi release from my GitHub
+* Configurate config.ini file:
+    * WSGI - path to WSGI application and function with realization of WSGI protocol
+    * Server - application server configuration (host and port)
+* Open terminal in project directory and ebter the command: `python app.py`
+
