@@ -13,10 +13,7 @@
 _And also to consider something like this:_
 
 * _load balancing on application servers (you can change number of application servers in config.ini)_
-* _data encryption using SSH_
-
-_Plus you can see how async works using the select system call and generators (proxy.py)_
-
+* _asynchronous works using the select system call and generators (proxy.py)_
 
 <h2>Program launch</h2>
 
